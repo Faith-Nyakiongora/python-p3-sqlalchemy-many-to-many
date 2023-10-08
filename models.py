@@ -39,3 +39,20 @@ class Review(Base):
         return f'Review(id={self.id}, ' + \
             f'score={self.score}, ' + \
             f'game_id={self.game_id})'
+    
+    user_id = Column(Integer(), ForeignKey('users.id'))
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer(), primary_key=True)
+    name = Column(String())
+    created_at = Column(DateTime(), server_default=func.now())
+    updated_at = Column(DateTime(), onupdate=func.now())
+
+    # don't forget your __repr__()!
+    def __repr__(self):
+        return f'User(id={self.id}, ' + \
+            f'name={self.name})'
+    
+    reviews = relationship('Review', backref=backref('user'))
